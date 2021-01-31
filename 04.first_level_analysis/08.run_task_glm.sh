@@ -52,36 +52,8 @@ run3dDeconvolve="${run3dDeconvolve} -polort 4"
 
 case ${task} in
 	motor )
-		run3dDeconvolve="${run3dDeconvolve} -num_stimts 5"
-		run3dDeconvolve="${run3dDeconvolve} -stim_label 1 finger_left -stim_times 1 ${ospr}_finger_left_onset.1D SPMG1(15)"
-		run3dDeconvolve="${run3dDeconvolve} -stim_label 2 finger_right -stim_times 2 ${ospr}_finger_right_onset.1D SPMG1(15)"
-		run3dDeconvolve="${run3dDeconvolve} -stim_label 3 toe_left -stim_times 3 ${ospr}_toe_left_onset.1D SPMG1(15)"
-		run3dDeconvolve="${run3dDeconvolve} -stim_label 4 toe_right -stim_times 4 ${ospr}_toe_right_onset.1D SPMG1(15)"
-		run3dDeconvolve="${run3dDeconvolve} -stim_label 5 tongue -stim_times 5 ${ospr}_tongue_onset.1D SPMG1(15)"
-	;;
-	simon )
-		run3dDeconvolve="${run3dDeconvolve} -num_stimts 8"
-		run3dDeconvolve="${run3dDeconvolve} -stim_label 1 congruent -stim_times_AM1 1 ${ospr}_left_congruent_correct_onset.1D dmUBLOCK"
-		run3dDeconvolve="${run3dDeconvolve} -stim_label 2 incongruent -stim_times_AM1 2 ${ospr}_right_congruent_correct_onset.1D dmUBLOCK"
-		run3dDeconvolve="${run3dDeconvolve} -stim_label 3 left -stim_times_AM1 3 ${ospr}_left_incongruent_correct_onset.1D dmUBLOCK"
-		run3dDeconvolve="${run3dDeconvolve} -stim_label 4 right -stim_times_AM1 4 ${ospr}_right_incongruent_correct_onset.1D dmUBLOCK"
-		run3dDeconvolve="${run3dDeconvolve} -stim_label 5 wrong_lc -stim_times_AM1 5 ${ospr}_left_congruent_wrong_onset.1D dmUBLOCK"
-		run3dDeconvolve="${run3dDeconvolve} -stim_label 6 wrong_rc -stim_times_AM1 6 ${ospr}_right_congruent_wrong_onset.1D dmUBLOCK"
-		run3dDeconvolve="${run3dDeconvolve} -stim_label 7 wrong_li -stim_times_AM1 7 ${ospr}_left_incongruent_wrong_onset.1D dmUBLOCK"
-		run3dDeconvolve="${run3dDeconvolve} -stim_label 8 wrong_ri -stim_times_AM1 8 ${ospr}_right_incongruent_wrong_onset.1D dmUBLOCK"
-	;;
-	pinel )
-		run3dDeconvolve="${run3dDeconvolve} -num_stimts 10"
-		run3dDeconvolve="${run3dDeconvolve} -stim_label 1 acalc -stim_times 1 ${ospr}_acalc_onset.1D SPMG1(0)"
-		run3dDeconvolve="${run3dDeconvolve} -stim_label 2 amot_left -stim_times 2 ${ospr}_amot_left_onset.1D SPMG1(0)"
-		run3dDeconvolve="${run3dDeconvolve} -stim_label 3 amot_right -stim_times 3 ${ospr}_amot_right_onset.1D SPMG1(0)"
-		run3dDeconvolve="${run3dDeconvolve} -stim_label 4 asent -stim_times 4 ${ospr}_asent_onset.1D SPMG1(0)"
-		run3dDeconvolve="${run3dDeconvolve} -stim_label 5 chbh -stim_times 5 ${ospr}_chbh_onset.1D SPMG1(0)"
-		run3dDeconvolve="${run3dDeconvolve} -stim_label 6 chbv -stim_times 6 ${ospr}_chbv_onset.1D SPMG1(0)"
-		run3dDeconvolve="${run3dDeconvolve} -stim_label 7 vcalc -stim_times 7 ${ospr}_vcalc_onset.1D SPMG1(0)"
-		run3dDeconvolve="${run3dDeconvolve} -stim_label 8 vmot_left -stim_times 8 ${ospr}_vmot_left_onset.1D SPMG1(0)"
-		run3dDeconvolve="${run3dDeconvolve} -stim_label 9 vmot_right -stim_times 9 ${ospr}_vmot_right_onset.1D SPMG1(0)"
-		run3dDeconvolve="${run3dDeconvolve} -stim_label 10 vsent -stim_times 10 ${ospr}_vsent_onset.1D SPMG1(0)"
+		run3dDeconvolve="${run3dDeconvolve} -num_stimts 1"
+		run3dDeconvolve="${run3dDeconvolve} -stim_label 1 all_mot -stim_times 1 ${ospr}_move_onset.1D SPMG1(15)"
 	;;
 	* ) echo "    !!! Warning !!! Invalid task: ${task}"; exit ;;
 esac
@@ -100,9 +72,70 @@ ${run3dDeconvolve}
 		  -mask ${mask}.nii.gz         \
 		  -input ${func}.nii.gz        \
 		  -tout -verb                  \
-		  -Rfitts ${fitts}.nii.gz      \
-		  -Rbuck  ${rbuck}.nii.gz      \
-		  -Rerrts ${ertts}.nii.gz
+		  -Rfitts ${fitts}-allmot.nii.gz      \
+		  -Rbuck  ${rbuck}-allmot.nii.gz      \
+		  -Rerrts ${ertts}-allmot.nii.gz
+
+
+# # Prepare 3dDeconvolve on the full run
+# echo "Compute statistical maps of activation per individual event ocurrence"
+# echo "=============================================================================="
+# run3dDeconvolve="3dDeconvolve -overwrite -input ${func}.nii.gz -mask ${mask}.nii.gz"
+# run3dDeconvolve="${run3dDeconvolve} -polort 4"
+
+# case ${task} in
+# 	motor )
+# 		run3dDeconvolve="${run3dDeconvolve} -num_stimts 5"
+# 		run3dDeconvolve="${run3dDeconvolve} -stim_label 1 finger_left -stim_times 1 ${ospr}_finger_left_onset.1D SPMG1(15)"
+# 		run3dDeconvolve="${run3dDeconvolve} -stim_label 2 finger_right -stim_times 2 ${ospr}_finger_right_onset.1D SPMG1(15)"
+# 		run3dDeconvolve="${run3dDeconvolve} -stim_label 3 toe_left -stim_times 3 ${ospr}_toe_left_onset.1D SPMG1(15)"
+# 		run3dDeconvolve="${run3dDeconvolve} -stim_label 4 toe_right -stim_times 4 ${ospr}_toe_right_onset.1D SPMG1(15)"
+# 		run3dDeconvolve="${run3dDeconvolve} -stim_label 5 tongue -stim_times 5 ${ospr}_tongue_onset.1D SPMG1(15)"
+# 	;;
+# 	simon )
+# 		run3dDeconvolve="${run3dDeconvolve} -num_stimts 8"
+# 		run3dDeconvolve="${run3dDeconvolve} -stim_label 1 congruent -stim_times_AM1 1 ${ospr}_left_congruent_correct_onset.1D dmUBLOCK"
+# 		run3dDeconvolve="${run3dDeconvolve} -stim_label 2 incongruent -stim_times_AM1 2 ${ospr}_right_congruent_correct_onset.1D dmUBLOCK"
+# 		run3dDeconvolve="${run3dDeconvolve} -stim_label 3 left -stim_times_AM1 3 ${ospr}_left_incongruent_correct_onset.1D dmUBLOCK"
+# 		run3dDeconvolve="${run3dDeconvolve} -stim_label 4 right -stim_times_AM1 4 ${ospr}_right_incongruent_correct_onset.1D dmUBLOCK"
+# 		run3dDeconvolve="${run3dDeconvolve} -stim_label 5 wrong_lc -stim_times_AM1 5 ${ospr}_left_congruent_wrong_onset.1D dmUBLOCK"
+# 		run3dDeconvolve="${run3dDeconvolve} -stim_label 6 wrong_rc -stim_times_AM1 6 ${ospr}_right_congruent_wrong_onset.1D dmUBLOCK"
+# 		run3dDeconvolve="${run3dDeconvolve} -stim_label 7 wrong_li -stim_times_AM1 7 ${ospr}_left_incongruent_wrong_onset.1D dmUBLOCK"
+# 		run3dDeconvolve="${run3dDeconvolve} -stim_label 8 wrong_ri -stim_times_AM1 8 ${ospr}_right_incongruent_wrong_onset.1D dmUBLOCK"
+# 	;;
+# 	pinel )
+# 		run3dDeconvolve="${run3dDeconvolve} -num_stimts 10"
+# 		run3dDeconvolve="${run3dDeconvolve} -stim_label 1 acalc -stim_times 1 ${ospr}_acalc_onset.1D SPMG1(0)"
+# 		run3dDeconvolve="${run3dDeconvolve} -stim_label 2 amot_left -stim_times 2 ${ospr}_amot_left_onset.1D SPMG1(0)"
+# 		run3dDeconvolve="${run3dDeconvolve} -stim_label 3 amot_right -stim_times 3 ${ospr}_amot_right_onset.1D SPMG1(0)"
+# 		run3dDeconvolve="${run3dDeconvolve} -stim_label 4 asent -stim_times 4 ${ospr}_asent_onset.1D SPMG1(0)"
+# 		run3dDeconvolve="${run3dDeconvolve} -stim_label 5 chbh -stim_times 5 ${ospr}_chbh_onset.1D SPMG1(0)"
+# 		run3dDeconvolve="${run3dDeconvolve} -stim_label 6 chbv -stim_times 6 ${ospr}_chbv_onset.1D SPMG1(0)"
+# 		run3dDeconvolve="${run3dDeconvolve} -stim_label 7 vcalc -stim_times 7 ${ospr}_vcalc_onset.1D SPMG1(0)"
+# 		run3dDeconvolve="${run3dDeconvolve} -stim_label 8 vmot_left -stim_times 8 ${ospr}_vmot_left_onset.1D SPMG1(0)"
+# 		run3dDeconvolve="${run3dDeconvolve} -stim_label 9 vmot_right -stim_times 9 ${ospr}_vmot_right_onset.1D SPMG1(0)"
+# 		run3dDeconvolve="${run3dDeconvolve} -stim_label 10 vsent -stim_times 10 ${ospr}_vsent_onset.1D SPMG1(0)"
+# 	;;
+# 	* ) echo "    !!! Warning !!! Invalid task: ${task}"; exit ;;
+# esac
+
+# run3dDeconvolve="${run3dDeconvolve} -ortvec ${fdir}/${flpr}_echo-1_bold_mcf_demean.par motderiv"
+# run3dDeconvolve="${run3dDeconvolve} -ortvec ${fdir}/${flpr}_echo-1_bold_mcf_deriv1.par motdemean"
+# run3dDeconvolve="${run3dDeconvolve} -bucket ${cbuck}.nii.gz"
+# run3dDeconvolve="${run3dDeconvolve} -x1D ${mat}.1D"
+# run3dDeconvolve="${run3dDeconvolve} -x1D_stop"
+
+# # Run 3dDeconvolve
+# echo "${run3dDeconvolve}"
+# ${run3dDeconvolve}
+
+# 3dREMLfit -overwrite -matrix ${mat}.1D \
+# 		  -mask ${mask}.nii.gz         \
+# 		  -input ${func}.nii.gz        \
+# 		  -tout -verb                  \
+# 		  -Rfitts ${fitts}.nii.gz      \
+# 		  -Rbuck  ${rbuck}.nii.gz      \
+# 		  -Rerrts ${ertts}.nii.gz
 
 # # Run 3dDeconvolve on a trial-by-trial basis with the stim_IM option
 # echo "Compute statistical maps of activation per individual event ocurrence"

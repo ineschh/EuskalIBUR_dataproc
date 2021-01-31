@@ -41,7 +41,7 @@ if_missing_do mkdir ${tmp}/${task} ${tmp}/${task}/CVR
 # Prepare to break GLM bricks
 case ${task} in
 	motor )
-		lastbrick=10
+		lastbrick=3
 	;;
 	simon )
 		lastbrick=16
@@ -67,7 +67,7 @@ do
 		if_missing_do copy fALFF/sub-${sub}_ses-${ses}_task-rest_run-01_fALFF.nii.gz ${tmp}/${task}/fALFF_${sub}_${ses}.nii.gz
 		if_missing_do copy RSFA/sub-${sub}_ses-${ses}_task-rest_run-01_RSFA.nii.gz ${tmp}/${task}/RSFA_${sub}_${ses}.nii.gz
 
-		rbuck=GLM/${task}/output/${sub}_${ses}_task-${task}_spm.nii.gz
+		rbuck=GLM/${task}/output/${sub}_${ses}_task-${task}_spm-allmot.nii.gz
 		for brick in $(seq 0 ${lastbrick})
 		do
 			# Break bricks
