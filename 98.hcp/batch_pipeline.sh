@@ -30,7 +30,6 @@ do
 		-o ${wdr}/../LogFiles/${sub}_${ses}_falff_pipe \
 		-e ${wdr}/../LogFiles/${sub}_${ses}_falff_pipe \
 		${wdr}/98.hcp/run_falff.sh ${sub} ${ses}
-		# -hold_jid "${joblist}" \
 	done
 done
 
@@ -38,6 +37,7 @@ done
 task=motor
 rm ${wdr}/../LogFiles/Mennes_${task}_pipe
 qsub -q long.q -N "${task}_Mennes_EuskalIBUR" \
+-hold_jid "falff_${sub}_${ses}_EuskalIBUR" \
 -o ${wdr}/../LogFiles/Mennes_${task}_pipe \
 -e ${wdr}/../LogFiles/Mennes_${task}_pipe \
 ${wdr}/98.hcp/run_Mennes.sh ${task}
