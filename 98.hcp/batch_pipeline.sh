@@ -87,11 +87,16 @@ fi
 
 for map in cvr lag
 do
-	rm ${wdr}/../LogFiles/${map}_surr_pipe
-	qsub -q long.q -N "surr_${map}_EuskalIBUR" \
-	-o ${wdr}/../LogFiles/${map}_surr_pipe \
-	-e ${wdr}/../LogFiles/${map}_surr_pipe \
-	${wdr}/98.hcp/run_surrogate_icc.sh ${map}
+	for i in `seq 0 33 1001`
+	do
+		let j=i+32
+		if [[ ${j} -gt 1000 ]]; then j=1000; fi;
+		rm ${wdr}/../LogFiles/${map}_surr_pipe
+		qsub -q long.q -N "surr_${map}_EuskalIBUR" \
+		-o ${wdr}/../LogFiles/${map}_surr_pipe \
+		-e ${wdr}/../LogFiles/${map}_surr_pipe \
+		${wdr}/98.hcp/run_surrogate_icc.sh ${map} ${minidx} ${maxidx}
+	done
 done
 	# -hold_jid "${joblist}" \
 

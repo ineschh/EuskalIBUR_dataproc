@@ -19,6 +19,8 @@ fi
 }
 
 map=$1
+minidx=$2
+maxidx=$3
 wdr=${2:-/data}
 sdr=${3:-/scripts}
 
@@ -111,7 +113,7 @@ rm ICC/${map}/1000_orig.nii.gz
 
 
 # Repeat for surrogates
-for n in $(seq -f %03g 0 1000)
+for n in $(seq -f %03g ${minidx} ${maxidx})
 do
 rm ICC/${map}/${n}.nii.gz
 
