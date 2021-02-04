@@ -11,7 +11,7 @@ module load singularity/3.3.0
 
 map=$1
 
-logname=surr_icc_${map}_log
+logname=surr_icc_${map}_${2}_log
 
 date
 
