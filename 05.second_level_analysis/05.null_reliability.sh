@@ -21,8 +21,8 @@ fi
 map=$1
 minidx=$2
 maxidx=$3
-wdr=${2:-/data}
-sdr=${3:-/scripts}
+wdr=${4:-/data}
+sdr=${5:-/scripts}
 
 ### print input
 printline=$( basename -- $0 )
@@ -42,7 +42,13 @@ if_missing_do mask ${sdr}/90.template/MNI152_T1_1mm_GM_resamp_2.5mm_mcorr.nii.gz
 
 if_missing_do mkdir ICC ICC/lag ICC/cvr
 
+for n in $(seq -f %03g ${minidx} ${maxidx})
+do
+
 # Run ICC once for original data
+if [[ $n -eq 1000 ]]
+then
+
 rm ICC/${map}/1000_orig.nii.gz
 
 3dICC -prefix ICC/${map}/1000_orig.nii.gz -jobs 10  \
@@ -110,11 +116,9 @@ rm ICC/${map}/1000_orig.nii.gz
     006  08  norm/std_006_08_${map}.nii.gz          \
     006  09  norm/std_006_09_${map}.nii.gz          \
     006  10  norm/std_006_10_${map}.nii.gz
-
+else
 
 # Repeat for surrogates
-for n in $(seq -f %03g ${minidx} ${maxidx})
-do
 rm ICC/${map}/${n}.nii.gz
 
 3dICC -prefix ICC/${map}/${n}.nii.gz -jobs 10      \
@@ -192,6 +196,7 @@ rm ICC/${map}/${n}.nii.gz
     009  08  surr/std_009_08_${map}/std_009_08_${map}_Surr_${n}.nii.gz \
     009  09  surr/std_009_09_${map}/std_009_09_${map}_Surr_${n}.nii.gz \
     009  10  surr/std_009_10_${map}/std_009_10_${map}_Surr_${n}.nii.gz
+fi
 done
 
 echo "Merge all ICCs together"
